@@ -1,0 +1,33 @@
+name: "Terraform Apply"
+
+#step1: Creating trigger
+on: 
+  push:
+    branches:
+      - main  # Runs on push to the main branch
+
+#Step2: Defining jobs
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.9.8  # Specify your preferred Terraform version
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        run: terraform plan -var= VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
+
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'  # Only apply changes on main branch
+
+        run: terraform apply -auto-approve -var= VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
