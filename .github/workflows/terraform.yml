@@ -24,7 +24,7 @@ jobs:
         run: terraform init
 
       - name: Terraform Plan
-        run: terraform plan -var= "vault_token = $VAULT_TOKEN"
+        run: terraform plan -var= "vault_token = ${VAULT_TOKEN}"
         env:
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
 
@@ -32,7 +32,7 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'  # Only apply changes on main branch
 
-        run: terraform apply -auto-approve -var= "vault_token = $VAULT_TOKEN"
+        run: terraform apply -auto-approve -var= "vault_token = ${VAULT_TOKEN}"
         env:
           VAULT_TOKEN: ${{ secrets.VAULT_TOKEN }}
 
